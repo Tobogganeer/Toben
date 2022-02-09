@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 
+#include "data/Vector3.h"
+
 #define GL_DEBUG
 
 #define ASSERT(x) if (!(x)) __debugbreak();
@@ -22,13 +24,15 @@ static void GLClearError()
 
 static bool GLLogCall(const char* func, const char* file, int line)
 {
+    bool success = true;
+
     while (GLenum error = glGetError())
     {
         std::cout << "[OpenGL Error]: " << "(" << error << "): " << func << " - " << file << ":" << line << std::endl;
-        return false;
+        success = false;
     }
 
-    return true;
+    return success;
 }
 
 static unsigned int CompileShader(unsigned int type, const std::string& source)
@@ -46,7 +50,8 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
     {
         int length;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-        char* message = (char*)alloca(length * sizeof(char));
+        //char* message = (char*)alloca(length * sizeof(char));
+        char message[512];
         glGetShaderInfoLog(shader, length, &length, message);
         const char* typeStr = type == GL_VERTEX_SHADER ? "vertex" : "fragment";
         std::cout << "Failed to compile " << typeStr << " shader" << std::endl;
@@ -75,6 +80,11 @@ static unsigned int CreateShader(const std::string& vsSource, const std::string&
     return program;
 }
 
+static void glErrorCallback(int error, const char* description)
+{
+    fprintf(stderr, "[OpenGL Error]: %s\n", description);
+}
+
 int main(void)
 {
     GLFWwindow* window;
@@ -82,6 +92,11 @@ int main(void)
     /* Initialize the library */
     if (!glfwInit())
         return -1;
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+
+    glfwSetErrorCallback(glErrorCallback);
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(640, 480, "Toben", NULL, NULL);
@@ -101,8 +116,6 @@ int main(void)
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-
-
 
     float positions[8] = {
         -0.5f, -0.5f, // 0
@@ -128,7 +141,6 @@ int main(void)
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
-
     unsigned int ibo;
     glGenBuffers(1, &ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -149,12 +161,13 @@ int main(void)
 
     //glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.2f, 0.2f, 0.35f, 1.0f);
+        glClearColor(0.2f, 0.2f, 0.4f, 1.0f);
 
         GLenum mode = GL_TRIANGLES;
         GLCall(glDrawElements(mode, 6, GL_UNSIGNED_INT, nullptr));
