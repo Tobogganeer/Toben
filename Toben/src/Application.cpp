@@ -99,6 +99,11 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+
+
     float positions[8] = {
         -0.5f, -0.5f, // 0
          0.5f, -0.5f, // 1
@@ -110,6 +115,10 @@ int main(void)
         0, 1, 2,
         2, 3, 0
     };
+
+    unsigned int vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
     unsigned int buffer;
     glGenBuffers(1, &buffer);
@@ -144,9 +153,11 @@ int main(void)
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.2f, 0.2f, 0.35f, 1.0f);
 
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        GLenum mode = GL_TRIANGLES;
+        GLCall(glDrawElements(mode, 6, GL_UNSIGNED_INT, nullptr));
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
