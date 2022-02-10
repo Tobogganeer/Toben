@@ -4,8 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
-#include "data/Vector3.h"
+#include "glm/vec3.hpp"
 
 #define GL_DEBUG
 
@@ -16,6 +15,11 @@
 #else
 #define GLCall(x) x
 #endif
+
+//https://github.com/g-truc/glm/blob/master/manual.md#section1
+//https://github.com/g-truc/glm
+//https://github.com/nothings/stb
+
 
 static void GLClearError()
 {
