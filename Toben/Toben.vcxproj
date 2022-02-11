@@ -20,7 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\data\Shader.cpp" />
+    <ClCompile Include="src\data\Texture.cpp" />
     <ClCompile Include="src\glm\detail\glm.cpp" />
+    <ClCompile Include="src\tobutils\Logger.cpp" />
+    <ClCompile Include="src\tobutils\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.frag" />
@@ -165,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="src\cmpf.h" />
     <ClInclude Include="src\data\Material.h" />
+    <ClInclude Include="src\data\Shader.h" />
     <ClInclude Include="src\data\Texture.h" />
     <ClInclude Include="src\glm\common.hpp" />
     <ClInclude Include="src\glm\detail\compute_common.hpp" />
@@ -451,8 +456,10 @@
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\stb\stb_image.h" />
     <ClInclude Include="src\tobcore.h" />
+    <ClInclude Include="src\tobutils\Logger.h" />
     <ClInclude Include="src\tobutils\tobmath.h" />
     <ClInclude Include="src\data\Vertex.h" />
+    <ClInclude Include="src\tobutils\Time.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

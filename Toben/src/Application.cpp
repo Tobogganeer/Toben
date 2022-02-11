@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include "glm/vec3.hpp"
+#include "tobutils/Time.h"
+#include "data/Shader.h"
 
 #define GL_DEBUG
 
@@ -37,51 +39,6 @@ static bool GLLogCall(const char* func, const char* file, int line)
     }
 
     return success;
-}
-
-static unsigned int CompileShader(unsigned int type, const std::string& source)
-{
-    unsigned int shader = glCreateShader(type);
-    const char* src = source.c_str();
-    glShaderSource(shader, 1, &src, nullptr);
-    glCompileShader(shader);
-
-    // Error handling
-    int result;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
-
-    if (result == GL_FALSE)
-    {
-        int length;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-        //char* message = (char*)alloca(length * sizeof(char));
-        char message[512];
-        glGetShaderInfoLog(shader, length, &length, message);
-        const char* typeStr = type == GL_VERTEX_SHADER ? "vertex" : "fragment";
-        std::cout << "Failed to compile " << typeStr << " shader" << std::endl;
-        std::cout << message << std::endl;
-        glDeleteShader(shader);
-        return 0;
-    }
-
-    return shader;
-}
-
-static unsigned int CreateShader(const std::string& vsSource, const std::string& fsSource)
-{
-    unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, vsSource);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fsSource);
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
-    glLinkProgram(program);
-    glValidateProgram(program);
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    return program;
 }
 
 static void glErrorCallback(int error, const char* description)
@@ -151,24 +108,19 @@ int main(void)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
 
-
-    std::ifstream vsStream("res/shaders/Basic.vert");
-    std::stringstream vs;
-    vs << vsStream.rdbuf();
-
-    std::ifstream fsStream("res/shaders/Basic.frag");
-    std::stringstream fs;
-    fs << fsStream.rdbuf();
-
-    unsigned int shader = CreateShader(vs.str(), fs.str());
-    glUseProgram(shader);
+    Shader shader = Shader("res/shaders/Basic.vert", "res/shaders/Basic.frag");
+    shader.Use();
 
     //glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
+    Time::Init();
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        Time::Tick();
+
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.2f, 0.2f, 0.4f, 1.0f);
@@ -183,7 +135,7 @@ int main(void)
         glfwPollEvents();
     }
 
-    glDeleteProgram(shader);
+    shader.Delete();
 
     glfwTerminate();
     return 0;
