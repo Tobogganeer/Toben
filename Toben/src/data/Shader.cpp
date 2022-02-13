@@ -1,12 +1,16 @@
 //https://learnopengl.com/Getting-started/Shaders
-#include "Shader.h"
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+#include "Shader.h"
+
+#include "../tobcore.h"
+#include "../vendor/glm/packing.hpp"
+#include "../vendor/glm/gtc/type_ptr.hpp"
 
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
@@ -19,12 +23,17 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
     std::stringstream fs;
     fs << fsStream.rdbuf();
 
-    ID = CreateShader(vs.str(), fs.str());
+    ID = Shader::CreateShader(vs.str(), fs.str());
 }
 
-void Shader::Use()
+void Shader::Bind()
 {
     glUseProgram(ID);
+}
+
+void Shader::Unbind()
+{
+    glUseProgram(0);
 }
 
 void Shader::Delete()
@@ -37,18 +46,28 @@ Shader::~Shader()
     Delete();
 }
 
+void Shader::SetInt(const std::string& name, int value)
+{
+    glUniform1i(GetUniformLocation(name), value);
+}
+
+void Shader::SetTexture(const std::string& name, int slot)
+{
+    SetInt(name, slot);
+}
 
 void Shader::SetFloat(const std::string& name, float value)
 {
-    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+    glUniform1f(GetUniformLocation(name), value);
 }
 
-void Shader::SetMat4(const std::string& name, const glm::mat4x4& value) {
-    
+void Shader::SetMat4(const std::string& name, const glm::mat4x4& value)
+{
+    glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
 
 
-static unsigned int CompileShader(unsigned int type, const std::string& source)
+unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 {
     unsigned int shader = glCreateShader(type);
     const char* src = source.c_str();
@@ -76,7 +95,7 @@ static unsigned int CompileShader(unsigned int type, const std::string& source)
     return shader;
 }
 
-static unsigned int CreateShader(const std::string& vsSource, const std::string& fsSource)
+unsigned int Shader::CreateShader(const std::string& vsSource, const std::string& fsSource)
 {
     unsigned int program = glCreateProgram();
     unsigned int vs = CompileShader(GL_VERTEX_SHADER, vsSource);
@@ -91,4 +110,18 @@ static unsigned int CreateShader(const std::string& vsSource, const std::string&
     glDeleteShader(fs);
 
     return program;
+}
+
+int Shader::GetUniformLocation(const std::string& name)
+{
+    if (uniformCache.find(name) != uniformCache.end())
+        return uniformCache[name];
+
+    int loc = glGetUniformLocation(ID, name.c_str());
+
+    if (loc == -1)
+        std::cout << "[Shader Warning]: '" << name << "' doesnt exist!" << std::endl;
+    uniformCache[name] = loc;
+
+    return loc;
 }

@@ -1,27 +1,36 @@
 #pragma once
 
 #include <string>
-#include "../glm/vec2.hpp"
-#include "../glm/vec3.hpp"
-#include "../glm/vec4.hpp"
-#include "../glm/mat4x4.hpp"
+//#include "../vendor/glm/vec2.hpp"
+//#include "../vendor/glm/vec3.hpp"
+//#include "../vendor/glm/vec4.hpp"
+#include "../vendor/glm/mat4x4.hpp"
+#include <unordered_map>
 
 class Shader
 {
 public:
-    unsigned int ID;
-
     Shader(const char* vertexPath, const char* fragmentPath);
     ~Shader();
 
-    void Use();
+    void Bind();
+    void Unbind();
     void Delete();
     //void SetBool(const std::string& name, bool value);
     void SetInt(const std::string& name, int value);
+    void SetTexture(const std::string& name, int slot);
     void SetFloat(const std::string& name, float value);
-    void SetVec2(const std::string& name, const glm::vec2& value);
-    void SetVec3(const std::string& name, const glm::vec3& value);
-    void SetVec4(const std::string& name, const glm::vec4& value);
-    void SetU16Vec4(const std::string& name, const glm::u16vec4& value);
+    void SetVec2(const std::string& name, float x, float y);
+    void SetVec3(const std::string& name, float x, float y, float z);
+    void SetVec4(const std::string& name, float x, float y, float z, float w);
     void SetMat4(const std::string& name, const glm::mat4x4& value);
+
+    int GetUniformLocation(const std::string& name);
+
+private:
+    unsigned int ID;
+
+    static unsigned int CompileShader(unsigned int type, const std::string& source);
+    static unsigned int CreateShader(const std::string& vsSource, const std::string& fsSource);
+    std::unordered_map<std::string, int> uniformCache;
 };

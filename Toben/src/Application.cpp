@@ -4,9 +4,15 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "glm/vec3.hpp"
-#include "tobutils/Time.h"
+#include "vendor/glm/vec3.hpp"
+#include "utils/Time.h"
 #include "data/Shader.h"
+#include "data/Texture.h"
+#include "graphics/Display.h"
+#include "data/buffers/Buffers.h"
+#include "utils/normalize.h"
+#include "data/Vertex.h"
+#include "data/Mesh.h"
 
 #define GL_DEBUG
 
@@ -41,80 +47,83 @@ static bool GLLogCall(const char* func, const char* file, int line)
     return success;
 }
 
-static void glErrorCallback(int error, const char* description)
-{
-    fprintf(stderr, "[OpenGL Error]: %s\n", description);
-}
-
 int main(void)
 {
-    GLFWwindow* window;
+    Display display;
+    if (!display.Create(1280, 720, "Toben", false)) return -1;
 
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+    std::vector<Vertex> verts = std::vector<Vertex>
+        ({
+            Vertex({-0.5f, -0.5f, 0.0f}, {0, 0, 0}, {0, 0}),
+            Vertex({ 0.5f, -0.5f, 0.0f}, {0, 0, 0}, {1, 0}),
+            Vertex({ 0.5f,  0.5f, 0.0f}, {0, 0, 0}, {1, 1}),
+            Vertex({-0.5f,  0.5f, 0.0f}, {0, 0, 0}, {0, 1}),
+        });
+    
+    std::vector<unsigned int> indices = std::vector<unsigned int>
+        ({
+            0, 1, 2,
+            2, 3, 0
+        });
+    
+    Mesh mesh = Mesh(verts, indices);
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+    //verts[0].Print();
+    //verts[1].Print();
+    //verts[2].Print();
+    //verts[3].Print();
+    //
+    //std::cout << sizeof(Vertex) << std::endl;
+    //
+    //std::cin.get();
 
-    glfwSetErrorCallback(glErrorCallback);
+    
+    //float positions[8] = {
+    //    -0.5f, -0.5f, // 0
+    //     0.5f, -0.5f, // 1
+    //     0.5f,  0.5f, // 2
+    //    -0.5f,  0.5f, // 3
+    //};
+    //
+    //unsigned int indices[6] = {
+    //    0, 1, 2,
+    //    2, 3, 0
+    //};
+    //
+    //VAO vao;
+    //VBO vbo = VBO(positions, 4 * 2 * sizeof(float));
+    //
+    //BufferLayout layout;
+    //layout.Push<float>(2);
+    //vao.Add(vbo, layout);
+    //
+    //IBO ibo = IBO(indices, 2 * 3);
 
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Toben", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
-
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-
-    if (glewInit() != GLEW_OK)
-        std::cout << "Error Initializing GLEW!" << std::endl;
-
-    std::cout << glGetString(GL_VERSION) << std::endl;
-
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-
-    float positions[8] = {
-        -0.5f, -0.5f, // 0
-         0.5f, -0.5f, // 1
-         0.5f,  0.5f, // 2
-        -0.5f,  0.5f, // 3
-    };
-
-    unsigned int indices[6] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    unsigned int vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
-    unsigned int buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
-
-    unsigned int ibo;
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 2 * 3 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
-
+    //VAO vao = VAO();
+    //VBO vbo = VBO(verts.data(), sizeof(Vertex) * verts.size());
+    //
+    //BufferLayout layout;
+    //layout.Push<glm::vec3>(1);
+    //layout.Push<glm::vec3>(1);
+    //layout.Push<glm::u16vec2>(1);
+    //layout.Push<glm::u8vec4>(1);
+    //vao.Add(vbo, layout);
+    //
+    //IBO ibo = IBO(indices.data(), indices.size());
+    
 
     Shader shader = Shader("res/shaders/Basic.vert", "res/shaders/Basic.frag");
-    shader.Use();
+    shader.Bind();
+
+    Texture tex = Texture("res/textures/test.png");
+    tex.Bind();
+
+    shader.SetTexture("mainTex", 0);
 
     //glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
-    Time::Init();
+    GLFWwindow* window = Display::GetWindow();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -125,8 +134,16 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.2f, 0.2f, 0.4f, 1.0f);
 
+        //vao.Bind();
+        //ibo.Bind();
+
+        mesh.Load();
+
         GLenum mode = GL_TRIANGLES;
-        GLCall(glDrawElements(mode, 6, GL_UNSIGNED_INT, nullptr));
+        //GLCall(glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, nullptr));
+        GLCall(glDrawElements(mode, mesh.indices.size(), GL_UNSIGNED_INT, nullptr));
+
+        mesh.Unload();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -135,8 +152,5 @@ int main(void)
         glfwPollEvents();
     }
 
-    shader.Delete();
-
-    glfwTerminate();
     return 0;
 }

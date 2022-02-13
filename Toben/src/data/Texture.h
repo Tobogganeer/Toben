@@ -10,6 +10,8 @@ public:
 	unsigned char* data;
 	std::string texName;
 
-	Texture(const std::string& path);
+	Texture(const std::string& path, bool freeData = false);
+	void Bind(unsigned int slot = 0);
+	void Unbind();
 	~Texture();
 };

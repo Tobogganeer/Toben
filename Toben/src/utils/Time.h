@@ -5,7 +5,6 @@ public:
 	static float time();
 	static float deltaTime();
 	static int frameCount();
-	static void Init();
 	static void Tick();
 private:
 	static float _time;

@@ -5,12 +5,9 @@ float Time::time() { return _time; }
 float Time::deltaTime() { return _deltaTime; }
 int Time::frameCount() { return _frameCount; }
 
-void Time::Init()
-{
-	_time = 0;
-	_deltaTime = 0;
-	_frameCount = 0;
-}
+float Time::_time = 0;
+float Time::_deltaTime = 0;
+int Time::_frameCount = 0;
 
 void Time::Tick()
 {
