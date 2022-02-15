@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
+#include "MeshRenderer.h"
 
 #pragma region GL Errors
 
@@ -43,5 +45,7 @@ static bool GLLogCall(const char* func, const char* file, int line)
 
 class Graphics
 {
+public:
+    static void Draw(const MeshRenderer& meshRenderer);
 };
 

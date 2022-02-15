@@ -7,9 +7,18 @@
 class Material
 {
 public:
-	glm::u16vec4 albedo;
+	glm::u8vec4 albedo;
 	Texture mainTexture;
 	Shader shader;
 	float smoothness;
 	float specular;
+
+	void LoadUniforms()
+	{
+		shader.Bind();
+		shader.SetColour("albedo", albedo);
+		shader.SetTexture("mainTex", mainTexture.texID);
+		shader.SetFloat("smoothness", smoothness);
+		shader.SetFloat("specular", smoothness);
+	}
 };

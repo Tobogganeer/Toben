@@ -2,13 +2,13 @@
 
 #include "../data/Mesh.h"
 #include "../data/Material.h"
-#include <vector>
+#include "../utils/HeapData.h"
 
 class MeshRenderer
 {
 public:
-	Mesh mesh;
-	Material material;
-	MeshRenderer(Mesh& mesh, Material& material);
+	HeapRef<Mesh> mesh;
+	HeapRef<Material> material;
+	MeshRenderer(const HeapRef<Mesh> mesh, const HeapRef<Material> material);
 };
 

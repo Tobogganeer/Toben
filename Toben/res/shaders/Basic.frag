@@ -8,6 +8,9 @@ in vec4 pass_colour;
 out vec4 out_colour;
 
 uniform sampler2D mainTex;
+uniform vec4 albedo;
+uniform float smoothness;
+uniform float specular;
 
 void main()
 {

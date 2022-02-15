@@ -46,6 +46,9 @@ Shader::~Shader()
     Delete();
 }
 
+
+#pragma region Setters
+
 void Shader::SetInt(const std::string& name, int value)
 {
     glUniform1i(GetUniformLocation(name), value);
@@ -65,6 +68,28 @@ void Shader::SetMat4(const std::string& name, const glm::mat4x4& value)
 {
     glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }
+
+void Shader::SetVec2(const std::string& name, float x, float y)
+{
+    glUniform2f(GetUniformLocation(name), x, y);
+}
+
+void Shader::SetVec3(const std::string& name, float x, float y, float z)
+{
+    glUniform3f(GetUniformLocation(name), x, y, z);
+}
+
+void Shader::SetVec4(const std::string& name, float x, float y, float z, float w)
+{
+    glUniform4f(GetUniformLocation(name), x, y, z, w);
+}
+
+void Shader::SetColour(const std::string& name, const glm::u8vec4 value)
+{
+    glUniform4f(GetUniformLocation(name), value.x / 255.0f, value.y / 255.0f, value.z / 255.0f, value.w / 255.0f);
+}
+
+#pragma endregion
 
 
 unsigned int Shader::CompileShader(unsigned int type, const std::string& source)

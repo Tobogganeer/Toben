@@ -24,8 +24,7 @@ public:
     void SetVec3(const std::string& name, float x, float y, float z);
     void SetVec4(const std::string& name, float x, float y, float z, float w);
     void SetMat4(const std::string& name, const glm::mat4x4& value);
-
-    int GetUniformLocation(const std::string& name);
+    void SetColour(const std::string& name, const glm::u8vec4 value);
 
 private:
     unsigned int ID;
@@ -33,4 +32,6 @@ private:
     static unsigned int CompileShader(unsigned int type, const std::string& source);
     static unsigned int CreateShader(const std::string& vsSource, const std::string& fsSource);
     std::unordered_map<std::string, int> uniformCache;
+
+    int GetUniformLocation(const std::string& name);
 };
