@@ -8,8 +8,8 @@
 
 #include "Shader.h"
 
-#include "../tobcore.h"
-#include "../vendor/glm/packing.hpp"
+#include "../core.h"
+//#include "../vendor/glm/packing.hpp"
 #include "../vendor/glm/gtc/type_ptr.hpp"
 
 

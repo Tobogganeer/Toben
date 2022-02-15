@@ -1,31 +1,31 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices)
+Mesh::Mesh(HeapRef<std::vector<Vertex>> vertices, HeapRef<std::vector<unsigned int>> indices)
 	:vertices(vertices), indices(indices)
 {
-	vao = VAO();
-	vbo = VBO(vertices.data(), sizeof(Vertex) * vertices.size());
+	GLCall(vao = HeapRef<VAO>(new VAO()));
+	GLCall(vbo = HeapRef<VBO>(new VBO(vertices->data(), sizeof(Vertex) * vertices->size())));
 
 	BufferLayout layout;
 	layout.Push<glm::vec3>(1);
 	layout.Push<glm::vec3>(1);
 	layout.Push<glm::u16vec2>(1);
 	layout.Push<glm::u8vec4>(1);
-	vao.Add(vbo, layout);
+	GLCall(vao->Add(vbo, layout));
 
-	ibo = IBO(indices.data(), indices.size());
+	GLCall(ibo = HeapRef<IBO>(new IBO(indices->data(), indices->size())));
 }
 
 void Mesh::Load()
 {
-	vao.Bind();
-	ibo.Bind();
+	vao->Bind();
+	ibo->Bind();
 }
 
 void Mesh::Unload()
 {
-	vao.Unbind();
-	ibo.Unbind();
+	vao->Unbind();
+	ibo->Unbind();
 }
 /*
 

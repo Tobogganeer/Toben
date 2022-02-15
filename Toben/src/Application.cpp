@@ -13,109 +13,39 @@
 #include "utils/normalize.h"
 #include "data/Vertex.h"
 #include "data/Mesh.h"
-
-#define GL_DEBUG
-
-#define ASSERT(x) if (!(x)) __debugbreak();
-
-#ifdef GL_DEBUG
-#define GLCall(x) GLClearError(); x; ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-#else
-#define GLCall(x) x
-#endif
+#include "utils/HeapData.h"
+#include "graphics/Graphics.h"
 
 //https://github.com/g-truc/glm/blob/master/manual.md#section1
 //https://github.com/g-truc/glm
 //https://github.com/nothings/stb
 
 
-static void GLClearError()
-{
-    while (glGetError() != GL_NO_ERROR);
-}
-
-static bool GLLogCall(const char* func, const char* file, int line)
-{
-    bool success = true;
-
-    while (GLenum error = glGetError())
-    {
-        std::cout << "[OpenGL Error]: " << "(" << error << "): " << func << " - " << file << ":" << line << std::endl;
-        success = false;
-    }
-
-    return success;
-}
-
 int main(void)
 {
     Display display;
     if (!display.Create(1280, 720, "Toben", false)) return -1;
 
-    std::vector<Vertex> verts = std::vector<Vertex>
+    HeapRef<std::vector<Vertex>> verts(new std::vector<Vertex>
         ({
             Vertex({-0.5f, -0.5f, 0.0f}, {0, 0, 0}, {0, 0}),
             Vertex({ 0.5f, -0.5f, 0.0f}, {0, 0, 0}, {1, 0}),
             Vertex({ 0.5f,  0.5f, 0.0f}, {0, 0, 0}, {1, 1}),
             Vertex({-0.5f,  0.5f, 0.0f}, {0, 0, 0}, {0, 1}),
-        });
+        }));
     
-    std::vector<unsigned int> indices = std::vector<unsigned int>
+    HeapRef<std::vector<unsigned int>> indices(new std::vector<unsigned int>
         ({
             0, 1, 2,
             2, 3, 0
-        });
+        }));
     
-    Mesh mesh = Mesh(verts, indices);
-
-    //verts[0].Print();
-    //verts[1].Print();
-    //verts[2].Print();
-    //verts[3].Print();
-    //
-    //std::cout << sizeof(Vertex) << std::endl;
-    //
-    //std::cin.get();
-
-    
-    //float positions[8] = {
-    //    -0.5f, -0.5f, // 0
-    //     0.5f, -0.5f, // 1
-    //     0.5f,  0.5f, // 2
-    //    -0.5f,  0.5f, // 3
-    //};
-    //
-    //unsigned int indices[6] = {
-    //    0, 1, 2,
-    //    2, 3, 0
-    //};
-    //
-    //VAO vao;
-    //VBO vbo = VBO(positions, 4 * 2 * sizeof(float));
-    //
-    //BufferLayout layout;
-    //layout.Push<float>(2);
-    //vao.Add(vbo, layout);
-    //
-    //IBO ibo = IBO(indices, 2 * 3);
-
-    //VAO vao = VAO();
-    //VBO vbo = VBO(verts.data(), sizeof(Vertex) * verts.size());
-    //
-    //BufferLayout layout;
-    //layout.Push<glm::vec3>(1);
-    //layout.Push<glm::vec3>(1);
-    //layout.Push<glm::u16vec2>(1);
-    //layout.Push<glm::u8vec4>(1);
-    //vao.Add(vbo, layout);
-    //
-    //IBO ibo = IBO(indices.data(), indices.size());
-    
+    GLCall(HeapRef<Mesh> mesh = HeapRef<Mesh>(new Mesh(verts, indices)));
 
     Shader shader = Shader("res/shaders/Basic.vert", "res/shaders/Basic.frag");
     shader.Bind();
 
-    Texture tex = Texture("res/textures/test.png");
+    Texture tex = Texture("res/textures/test2.png");
     tex.Bind();
 
     shader.SetTexture("mainTex", 0);
@@ -137,13 +67,13 @@ int main(void)
         //vao.Bind();
         //ibo.Bind();
 
-        mesh.Load();
+        mesh->Load();
 
         GLenum mode = GL_TRIANGLES;
-        //GLCall(glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, nullptr));
-        GLCall(glDrawElements(mode, mesh.indices.size(), GL_UNSIGNED_INT, nullptr));
+        //GLCall(glDrawElements(mode, indices->size(), GL_UNSIGNED_INT, nullptr));
+        GLCall(glDrawElements(mode, mesh->indices->size(), GL_UNSIGNED_INT, nullptr));
 
-        mesh.Unload();
+        //mesh.Unload();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);

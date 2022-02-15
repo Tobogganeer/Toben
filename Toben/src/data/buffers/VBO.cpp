@@ -3,23 +3,23 @@
 
 VBO::VBO(const void* data, unsigned int size)
 {
-    glGenBuffers(1, &ID);
-    glBindBuffer(GL_ARRAY_BUFFER, ID);
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    GLCall(glGenBuffers(1, &ID));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, ID));
+    GLCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
 }
 
 VBO::~VBO()
 {
-    glDeleteBuffers(1, &ID);
+    GLCall(glDeleteBuffers(1, &ID));
 }
 
 
 void VBO::Bind() const
 {
-    glBindBuffer(GL_ARRAY_BUFFER, ID);
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, ID));
 }
 
 void VBO::Unbind() const
 {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }

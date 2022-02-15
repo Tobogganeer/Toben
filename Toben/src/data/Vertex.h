@@ -23,7 +23,7 @@ public:
 	}
 
 	Vertex(glm::vec3 position, glm::vec3 normal, glm::vec2 uv)
-		:position(position), normal(normal), colour(0, 0, 0, 0)
+		:position(position), normal(normal), colour(255, 255, 255, 255)
 	{
 		const int MAX = 65535;
 		this->uv.x = static_cast<unsigned short>(uv.x * MAX);
