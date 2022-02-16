@@ -1,8 +1,8 @@
 #include "Texture.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "../vendor/stb_image/stb_image.h"
 #include "../core.h"
-#include <GL/glew.h>
 
 Texture::Texture(const std::string& path, bool freeData)
 {
@@ -47,6 +47,6 @@ Texture::~Texture()
 {
 	glDeleteTextures(1, &texID);
 
-	if (data != NULL)
+	if (data != NULL && data != nullptr)
 		stbi_image_free(data);
 }

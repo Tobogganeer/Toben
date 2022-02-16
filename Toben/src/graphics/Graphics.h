@@ -46,6 +46,11 @@ static bool GLLogCall(const char* func, const char* file, int line)
 class Graphics
 {
 public:
+    static void Init(GLFWwindow* window);
+    static void Clear();
     static void Draw(const MeshRenderer& meshRenderer);
+    static void PostRender();
+private:
+    static GLFWwindow* window;
 };
 

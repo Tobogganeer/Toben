@@ -20,6 +20,7 @@
 //https://github.com/g-truc/glm
 //https://github.com/nothings/stb
 
+#include <sstream>
 
 int main(void)
 {
@@ -40,46 +41,26 @@ int main(void)
             2, 3, 0
         }));
     
-    GLCall(HeapRef<Mesh> mesh = HeapRef<Mesh>(new Mesh(verts, indices)));
-
     Shader shader = Shader("res/shaders/Basic.vert", "res/shaders/Basic.frag");
-    shader.Bind();
-
     Texture tex = Texture("res/textures/test2.png");
-    tex.Bind();
 
-    shader.SetTexture("mainTex", 0);
+    HeapRef<Mesh> mesh = Mesh::Create(verts, indices);
+    HeapRef<Material> mat = Material::Create(shader, tex);
 
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+    MeshRenderer rend = MeshRenderer(mesh, mat);
 
     GLFWwindow* window = Display::GetWindow();
+    Graphics::Init(window);
 
-    /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         Time::Tick();
 
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.2f, 0.2f, 0.4f, 1.0f);
+        Graphics::Clear();
 
-        //vao.Bind();
-        //ibo.Bind();
+        Graphics::Draw(rend);
 
-        mesh->Load();
-
-        GLenum mode = GL_TRIANGLES;
-        //GLCall(glDrawElements(mode, indices->size(), GL_UNSIGNED_INT, nullptr));
-        GLCall(glDrawElements(mode, mesh->indices->size(), GL_UNSIGNED_INT, nullptr));
-
-        //mesh.Unload();
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-
-        /* Poll for and process events */
-        glfwPollEvents();
+        Graphics::PostRender();
     }
 
     return 0;

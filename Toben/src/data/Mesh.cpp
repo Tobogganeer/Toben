@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "../graphics/Graphics.h"
 
 Mesh::Mesh(HeapRef<std::vector<Vertex>> vertices, HeapRef<std::vector<unsigned int>> indices)
 	:vertices(vertices), indices(indices)
@@ -39,4 +40,9 @@ glm::u8vec4 colour;
 Mesh::~Mesh()
 {
 
+}
+
+HeapRef<Mesh> Mesh::Create(HeapRef<std::vector<Vertex>> vertices, HeapRef<std::vector<unsigned int>> indices)
+{
+	return HeapRef<Mesh>(new Mesh(vertices, indices));
 }

@@ -9,6 +9,9 @@ class MeshRenderer
 public:
 	HeapRef<Mesh> mesh;
 	HeapRef<Material> material;
-	MeshRenderer(const HeapRef<Mesh> mesh, const HeapRef<Material> material);
+	MeshRenderer(HeapRef<Mesh> mesh, HeapRef<Material> material);
+	
+	void Load() const;
+	void Unload() const;
 };
 

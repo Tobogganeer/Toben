@@ -3,8 +3,6 @@
 #include "../vendor/glm/vec3.hpp"
 #include "../vendor/glm/vec4.hpp"
 #include "../vendor/glm/vec2.hpp"
-#include <iostream>
-#include <string>
 
 struct Vertex
 {
@@ -28,26 +26,6 @@ public:
 		const int MAX = 65535;
 		this->uv.x = static_cast<unsigned short>(uv.x * MAX);
 		this->uv.y = static_cast<unsigned short>(uv.y * MAX);
-	}
-
-	void Print()
-	{
-		std::cout << "vertex: " << strFromVec3(position) << " " << strFromVec3(normal) << " " << strFromVec2(uv) << " " << strFromVec4(colour) << std::endl;
-	}
-
-	std::string strFromVec2(glm::u16vec2 vec)
-	{
-		return std::string("v").append(std::to_string(vec.x)) + " " + std::to_string(vec.y);
-	}
-
-	std::string strFromVec3(glm::vec3 vec)
-	{
-		return std::string("v").append(std::to_string(vec.x)) + " " + std::to_string(vec.y) + " " + std::to_string(vec.z);
-	}
-
-	std::string strFromVec4(glm::u8vec4 vec)
-	{
-		return std::string("v").append(std::to_string(vec.x)) + " " + std::to_string(vec.y) + " " + std::to_string(vec.z) + " " + std::to_string(vec.w);
 	}
 
 	//glm::u16vec4 colour; // hdr?

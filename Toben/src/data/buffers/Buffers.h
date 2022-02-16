@@ -2,8 +2,8 @@
 
 #include <GL/glew.h>
 #include "BufferLayout.h"
-#include "../../graphics/Graphics.h"
 #include "../../utils/HeapData.h"
+//#include "../../graphics/Graphics.h"
 
 class VBO
 {

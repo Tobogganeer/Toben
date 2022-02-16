@@ -1,10 +1,10 @@
 #pragma once
 
-#include <vector>
 #include "Vertex.h"
 #include "buffers/Buffers.h"
 #include "../utils/HeapData.h"
-#include "../graphics/Graphics.h"
+
+#include <vector>
 
 class Mesh
 {
@@ -16,7 +16,8 @@ public:
 	void Load();
 	void Unload();
 	~Mesh();
-	//std::vector<uint16_t> indices;
+
+	static HeapRef<Mesh> Create(HeapRef<std::vector<Vertex>> vertices, HeapRef<std::vector<unsigned int>> indices);
 
 private:
 	HeapRef<VAO> vao;
