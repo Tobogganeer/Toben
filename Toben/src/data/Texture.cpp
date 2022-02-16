@@ -47,6 +47,6 @@ Texture::~Texture()
 {
 	glDeleteTextures(1, &texID);
 
-	if (data != NULL && data != nullptr)
-		stbi_image_free(data);
+	//if (data != NULL)
+	//	stbi_image_free(data);
 }

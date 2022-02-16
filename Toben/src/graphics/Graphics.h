@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "MeshRenderer.h"
+#include "Display.h"
 
 #pragma region GL Errors
 

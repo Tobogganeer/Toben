@@ -42,7 +42,7 @@ int main(void)
         }));
     
     Shader shader = Shader("res/shaders/Basic.vert", "res/shaders/Basic.frag");
-    Texture tex = Texture("res/textures/test2.png");
+    Texture tex = Texture("res/textures/test2.png", true);
 
     HeapRef<Mesh> mesh = Mesh::Create(verts, indices);
     HeapRef<Material> mat = Material::Create(shader, tex);
