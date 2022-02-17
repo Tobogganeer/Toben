@@ -1,6 +1,6 @@
 #include "Display.h"
 #include <iostream>
-#include "Graphics.h"
+//#include "Graphics.h"
 
 GLFWwindow* Display::window;
 int Display::width;

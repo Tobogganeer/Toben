@@ -15,11 +15,8 @@ uniform float specular;
 void main()
 {
     vec4 texCol = texture(mainTex, pass_uv);
-    //vec4 col = pass_colour;
-    vec4 uvCol = vec4(pass_uv.xy, 0.0f, 1.0f);
+    //vec4 uvCol = vec4(pass_uv.xy, 0.0f, 1.0f);
 
-    //out_colour = uvCol * texCol;
-    //out_colour = texCol * col;
     out_colour = texCol;
-    //out_colour = col;
+    //out_colour = vec4(1, 1, 1, 1);
 }

@@ -10,11 +10,25 @@ out vec3 pass_normal;
 out vec2 pass_uv;
 out vec4 pass_colour;
 
+uniform mat4 mvp;
+//uniform mat4 view;
+//uniform mat4 proj;
+//uniform mat4 tran;
+
+
 void main()
 {
-    pass_position = position;
+    //vec4 worldPos = tran * position;
+    //vec4 finalPos = proj * view * worldPos;
+    //vec4 finalPos = tran * position;
+    vec4 finalPos = mvp * position;
+    //vec4 finalPos = position;
+
+    //pass_position = mvp * position;
+    pass_position = finalPos;
     pass_normal = normal;
     pass_uv = uv;
     pass_colour = colour;
-    gl_Position = position;
+    //gl_Position = mvp * position;
+    gl_Position = finalPos;
 }

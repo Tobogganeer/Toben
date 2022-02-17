@@ -6,9 +6,9 @@
 class Camera
 {
 public:
-	const float FOV = 75;
+	const float FOV = 75.0f;
 	const float NEAR_PLANE = 0.1f;
-	const float FAR_PLANE = 1000.0f;
+	const float FAR_PLANE = 100.0f;
 
 	glm::mat4 projMatrix;
 	glm::mat4 viewMatrix;
