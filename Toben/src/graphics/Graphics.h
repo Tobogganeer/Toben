@@ -51,7 +51,7 @@ class Graphics
 public:
     static void Init(GLFWwindow* window);
     static void Clear();
-    static void YuckyYuckUploadMatrix(const MeshRenderer& mesh, Camera& cam, Transform& transform);
+    static void YuckyYuckUploadMatrix(const MeshRenderer& mesh, Camera& cam, Transform& transform, glm::vec3& lightDir);
     static void Draw(const MeshRenderer& meshRenderer);
     static void PostRender();
 private:

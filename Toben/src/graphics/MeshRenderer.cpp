@@ -6,7 +6,7 @@ MeshRenderer::MeshRenderer(const HeapRef<Mesh> mesh, const HeapRef<Material> mat
 void MeshRenderer::Load() const
 {
 	mesh->Load();
-	//material->LoadUniforms();
+	material->LoadUniforms();
 	material->shader.Bind();
 	material->mainTexture.Bind();
 }

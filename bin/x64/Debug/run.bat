@@ -1,0 +1,1 @@
+Toben.exe -model TR10.obj -texture "TR10 Texture.png" -scale 5

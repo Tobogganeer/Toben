@@ -19,6 +19,8 @@ public:
 
 	static HeapRef<Mesh> Create(HeapRef<std::vector<Vertex>> vertices, HeapRef<std::vector<unsigned int>> indices);
 
+	void DEBUG_DUMP();
+
 private:
 	HeapRef<VAO> vao;
 	HeapRef<VBO> vbo;

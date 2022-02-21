@@ -12,7 +12,7 @@ Texture::Texture(const std::string& path, bool freeData)
 	if (data == NULL)
 		Logger::Log(std::string("Failed to load texture ").append(path));
 
-	std::cout << stbi_failure_reason << std::endl;
+	//std::cout << stbi_failure_reason << std::endl;
 
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);

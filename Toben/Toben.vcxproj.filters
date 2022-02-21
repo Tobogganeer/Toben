@@ -66,6 +66,9 @@
     <ClCompile Include="src\data\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\OBJLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.vert" />
@@ -1387,6 +1390,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\data\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\OBJLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

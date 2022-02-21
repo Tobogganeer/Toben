@@ -46,3 +46,17 @@ HeapRef<Mesh> Mesh::Create(HeapRef<std::vector<Vertex>> vertices, HeapRef<std::v
 {
 	return HeapRef<Mesh>(new Mesh(vertices, indices));
 }
+
+void Mesh::DEBUG_DUMP()
+{
+	std::cout << "Mesh: v count = " << vertices->size() << std::endl;
+	for (Vertex v : *vertices)
+	{
+		v.DEBUG_DUMP();
+	}
+
+	for (unsigned int i : *indices)
+	{
+		std::cout << "i " << i << std::endl;
+	}
+}

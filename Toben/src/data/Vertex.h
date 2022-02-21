@@ -28,6 +28,18 @@ public:
 		this->uv.y = static_cast<unsigned short>(uv.y * MAX);
 	}
 
+	bool operator==(const Vertex& other)
+	{
+		return position == other.position && normal == other.normal
+			&& uv == other.uv && colour == other.colour;
+	}
+
+	void DEBUG_DUMP()
+	{
+		printf("V: p%3.2f %3.2f %3.2f  t%3.2f %3.2f  n%3.2f %3.2f %3.2f \n",
+			position.x, position.y, position.z, uv.x / 65535.0f, uv.y / 65535.0f, normal.x, normal.y, normal.z);
+	}
+
 	//glm::u16vec4 colour; // hdr?
 
 	//glm::u16vec2 uv;
